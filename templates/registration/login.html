@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Login | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container pt">
+    <div class="row">
+        <div class="col-md-6">
+            <form action="" method="POST">
+                {% bootstrap_form form %}
+                {% csrf_token %}
+                {% buttons %}
+                <button type="submit" class="btn btn-success">Login</button>
+                {% endbuttons %}
+            </form>
+        </div>
+        <div class="col-md-6">
+            <h2>Login in and count the cash!</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

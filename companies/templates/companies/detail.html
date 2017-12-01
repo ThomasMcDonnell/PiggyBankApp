@@ -1,0 +1,81 @@
+{% extends 'layout.html' %}
+{% load static from staticfiles %}
+{% load bootstrap4 %}
+
+{% load record_tags %}
+
+{% block title %}{{ object.name }} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container pt">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>{{ object.name }}</h3>
+                {{ object.description|linebreaks }}
+             {% if user == object.created_by %}
+            <hr>
+            <a href="{% url 'groups:companies:update' slug=object.slug %}">
+                <button type="button" class="btn btn-success btn-sm">Edit</button>
+            </a>
+            <form action="" method="POST">
+                {% csrf_token %}
+                {% bootstrap_field form.email_or_username layout='horizontal' %}
+                {% buttons %}
+                <button type="submit" class="btn btn-success btn-sm">Invite</button>
+                {% endbuttons %}
+            </form>
+            <hr>
+            {% endif %}
+        </div>
+            <div class="col-md-6">
+                <h4>Members</h4>
+                <div class="list-group">
+                    {% for member in object.members.all %}
+                        <a href="" class="list-group-item">
+                            {{ member.get_username }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Recent Logs</h3>
+            <div class="list-group">
+                {% for record in object.bonus_records.all %}
+                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">€{{ record.amount }}</h5>
+                    <small class="text-muted">{{ record.recorded_at|date:'SHORT_DATE_FORMAT' }}</small>
+                </div>
+                    {% if record.notes %}
+                    <p class="text-muted">{{ record.notes|linebreaks }}</p>
+                    {% endif %}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="ct-chart ct-perfect-fourth"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'js/chartist/chartist.min.css' %}">
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/stretchy.js' %}" data-filter="#id_notes"async></script>
+    <script src="{% static 'js/chartist/chartist.min.js' %}"></script>
+    <script>
+        {% chart_data as data %}
+        var data = {{ data|safe }};
+        new Chartist.Line('.ct-chart', data);
+    </script>
+{% endblock %}
+
+
+

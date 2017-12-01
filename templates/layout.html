@@ -1,0 +1,66 @@
+{% load static from staticfiles %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>{% block title %}PiggyBank{% endblock %}</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <!-- Custom CSS -->
+      {% block css %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/bonus_board_app.css' %}">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <a class="navbar-brand" href="{% url 'home' %}">Piggy Bank</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+        {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Companies</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'groups:companies:invites' %}">Invitations</a>
+                {% for company in user.companies.all %}
+                <a class="dropdown-item" href="{% url 'groups:companies:detail' slug=company.slug %}">{{ company.name }}</a>
+                {% endfor %}
+                {% if user.is_staff or user.is_superuser %}
+                <div role="separator" class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'groups:companies:create' %}">Create Company</a>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        <ul class="navbar-nav ml-auto">
+              {% if not user.is_authenticated %}
+              <li><a class="nav-link" href="{% url 'users:login' %}">Login</a></li>
+              <li><a class="nav-link" href="{% url 'users:signup' %}">Sign up</a></li>
+              {% else %}
+              <li><a class="nav-link" href="{% url 'users:dashboard' %}">Dashboard</a></li>
+              <li><a class="nav-link" href="{% url 'users:logout' %}">Logout</a></li>
+              {% endif %}
+          </ul>
+    </nav>
+
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+
+    <div class="container">
+        <hr>
+        <footer>
+        <p>&copy; 2016 Company, Inc.</p>
+        </footer>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  {% block js %}{% endblock %}
+  </body>
+</html>

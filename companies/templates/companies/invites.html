@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% load bootstrap4 %}
+
+{% block title %}Invites | {{ block.super }}{% endblock %}
+
+{% block content %}
+    <div class="container pt">
+         {% for invite in object_list %}
+        <div class="card text-center">
+            <div class="card-header">
+                Invitation!
+            </div>
+            <div class="card-block">
+                <h4 class="card-title">{{ invite.company }}</h4>
+                <p class="card-text">Hey you were invited by {{ invite.from_user }} to join {{ invite.company }}.</p>
+                <p>If you are expecting this invite go right ahead and accept if not just go ahead and reject.</p>
+                <a href="{% url 'groups:companies:invite_response' code=invite.uuid response='accept' %}" class="btn btn-success">Accept</a>
+                <a href="{% url 'groups:companies:invite_response' code=invite.uuid response='reject' %}" class="btn btn-danger">Reject</a>
+                </div>
+                <div class="card-footer text-muted">
+                        2 days ago
+                </div>
+            {% endfor %}
+    </div>
+
+{% endblock %}

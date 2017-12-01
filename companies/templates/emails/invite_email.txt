@@ -1,0 +1,7 @@
+Hi {{ invite.to_user.get_full_name }}!
+
+You've been invited to join {{ invite.company.name }} by {{ invite.from_user.get_full_name }}.
+
+Thanks!
+
+PiggyBank

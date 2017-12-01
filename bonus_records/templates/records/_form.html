@@ -1,0 +1,12 @@
+{% load bootstrap4 %}
+
+<form method="POST" action="{% url 'records:create' %}">
+    <h3>How much did you earn?</h3>
+    {% csrf_token %}
+    <div class="row">
+        {% bootstrap_form form %}
+    </div>
+    {% buttons %}
+    <input type="submit" value="Record" class=" btn btn-success">
+    {% endbuttons %}
+</form>

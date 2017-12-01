@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+{% load static from staticfiles %}
+
+{% load record_tags %}
+
+{% block title %}Dashboard | {{ block.super }}{% endblock %}
+
+{% block content %}
+{% if user.is_staff or user.is_superuser %}
+<div class="container pt">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Recent Logs</h3>
+            <div class="list-group">
+                {% for record in user.bonus_records.all %}
+                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">€{{ record.amount }}</h5>
+                    <small class="text-muted">{{ record.recorded_at|date:'SHORT_DATE_FORMAT' }}</small>
+                </div>
+                    {% if record.notes %}
+                    <p class="text-muted">{{ record.notes|linebreaks }}</p>
+                    {% endif %}
+                </a>
+                {% if record.id %}
+                <a class="btn btn-primary" href="{% url 'records:record_delete' pk=record.id %}">Delete</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            {% record_form %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ct-chart ct-perfect-fourth"></div>
+        </div>
+        {% else %}
+        <div class="container pt">
+            <div class="col-md-12">
+                <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">Welcome!</h4>
+                    <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+                    <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'js/chartist/chartist.min.css' %}">
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/stretchy.js' %}" data-filter="#id_notes"async></script>
+    <script src="{% static 'js/chartist/chartist.min.js' %}"></script>
+    <script>
+        {% chart_data as data %}
+        var data = {{ data|safe }};
+        new Chartist.Line('.ct-chart', data);
+    </script>
+{% endblock %}

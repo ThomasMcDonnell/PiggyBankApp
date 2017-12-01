@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block header %}{% endblock header %}
+
+{% block content %}
+<div>
+     <div class="alert alert-danger" role="alert">
+          <p>Are you sure you want to delete the contact {{ record }}?</p>
+
+          <form action="{% url 'record-delete' pk=record.id %}" method="POST">
+               {% csrf_token %}
+
+               <input type="submit" value="Yes, delete." />
+               <a href="{% url 'users:dashboard' %}">No, cancel.</a>
+          </form>
+     </div>
+</div>
+{% endblock %}
