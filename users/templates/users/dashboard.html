@@ -23,7 +23,10 @@
                     {% endif %}
                 </a>
                 {% if record.id %}
-                <a class="btn btn-primary" href="{% url 'records:record_delete' pk=record.id %}">Delete</a>
+                <form action="{% url 'records:record_delete' pk=record.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" value="Delete" class="btn btn-danger btn-lg btn-block">Delete</button>
+                </form>
                 {% endif %}
                 {% endfor %}
             </div>

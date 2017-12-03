@@ -18,8 +18,12 @@ class CreateRecord(LoginRequiredMixin, SelectRelatedMixin, CreateView):
         return super().form_valid(form)
 
 
-class DeleteRecordView(DeleteView):
+class DeleteRecordView(LoginRequiredMixin, DeleteView):
     model = Record
     success_url = reverse_lazy('users:dashboard')
+
+    def get_queryset(self):
+        user_id = self.request.user
+        return self.model.objects.filter(user_id=user_id)
 
 
