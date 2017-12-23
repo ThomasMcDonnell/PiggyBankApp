@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.core.urlresolvers import reverse_lazy
 from django.views.generic import CreateView, DeleteView
 
 from braces.views import SelectRelatedMixin
